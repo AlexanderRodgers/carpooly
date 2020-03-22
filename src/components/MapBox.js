@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from "mapbox-gl";
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import firebase from '../firebase';
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const styles = {
@@ -12,11 +13,14 @@ const styles = {
  const directions = new MapboxDirections({
     accessToken: 'pk.eyJ1IjoiYWxleHJvZGdlcnMiLCJhIjoiY2s4MjlxMWZzMDh0dzNlbnpxaXd4M3k5diJ9.1VPthZmgxhtKulM9ifl16g',
     unit: 'imperial',
-    profile: 'mapbox/driving'
+    profile: 'mapbox/driving-traffic'
  });
 
  const MapBox = () => {
    const [map, setMap] = useState(null);
+   const [origin, setOrigin] = useState(null);
+   const [dest, setDest] = useState(null);
+   const [waypoints, setWaypoints] = useState(null);
    const mapContainer = useRef(null);
 
    useEffect(() => {
@@ -30,43 +34,32 @@ const styles = {
             zoom: 10
          });
 
+         directions.on('origin', () => {
+            setOrigin(directions.getOrigin());
+         });
+
+         directions.on('destination', () => {
+            setDest(directions.getDestination());
+         });
+
+         directions.on('route', () => {
+            setWaypoints(directions.getWaypoints());
+            console.log(origin);
+            console.log(dest);
+            firebase.firestore().collection('routes').add({
+               origin,
+               destination: dest
+            });
+            console.log('route set', directions.getWaypoints());
+         });
+
          map.addControl(directions, 'top-left');
 
          map.on("load", () => {
-            map.loadImage(
-               'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png',
-               (error, image) => {
-                  if (error) throw error;
-                  map.addImage('cat', image);
-                  map.addSource('point', {
-                     'type': 'geojson',
-                     'data': {
-                        'type': 'FeatureCollection',
-                        'features': [
-                           {
-                              'type': 'Feature',
-                              'geometry': {
-                                 'type': 'Point',
-                                 'coordinates': [0, 0]
-                              }
-                           }
-                        ]
-                     } 
-                  });
-                  map.addLayer({
-                     'id': 'points',
-                     'type': 'symbol',
-                     'source': 'point',
-                     'layout': {
-                        'icon-image': 'cat',
-                        'icon-size': 0.25
-                     }
-                  });
-               }
-            )
             setMap(map);
             map.resize();
-         })
+         });
+
       };
 
       if (!map) initializeMap({ setMap, mapContainer });
