@@ -18,8 +18,8 @@ const styles = {
 
  const MapBox = () => {
    const [map, setMap] = useState(null);
-   const [origin, setOrigin] = useState(null);
-   const [dest, setDest] = useState(null);
+   const [origin, setOrigin] = useState({});
+   const [dest, setDest] = useState({});
    const [waypoints, setWaypoints] = useState(null);
    const mapContainer = useRef(null);
 
@@ -44,12 +44,10 @@ const styles = {
 
          directions.on('route', () => {
             setWaypoints(directions.getWaypoints());
-            console.log(origin);
-            console.log(dest);
-            firebase.firestore().collection('routes').add({
-               origin,
-               destination: dest
-            });
+            // firebase.firestore().collection('routes').add({
+            //    origin,
+            //    destination: dest
+            // });
             console.log('route set', directions.getWaypoints());
          });
 
@@ -64,6 +62,14 @@ const styles = {
 
       if (!map) initializeMap({ setMap, mapContainer });
    }, [map]);
+
+   useEffect(() => {
+      firebase.firestore().collection('routes').add({
+         origin,
+         destination: dest,
+         waypoints
+      })
+   }, [waypoints]);
 
    return <div ref={el => (mapContainer.current = el)} style={styles}></div>
  }
