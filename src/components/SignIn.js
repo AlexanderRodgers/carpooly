@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -47,7 +47,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignIn = () => {
+  const [disabled, setDisabled] = useState(false);
+  const [email, setEmail] = useState('');
+  const [pass, setPass] = useState('');
   const classes = useStyles();
+
+  // update the disabled state
+  useEffect(() => {
+    if (email && pass) {
+      if (disabled) setDisabled(false);
+      return;
+    }
+    if (!disabled) setDisabled(true);
+  }, [email, pass, disabled]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -61,6 +73,8 @@ const SignIn = () => {
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             variant="outlined"
             margin="normal"
             required
@@ -72,6 +86,8 @@ const SignIn = () => {
             autoFocus
           />
           <TextField
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
             variant="outlined"
             margin="normal"
             required
@@ -87,6 +103,7 @@ const SignIn = () => {
             label="Remember me"
           />
           <Button
+            disabled={disabled}
             type="submit"
             fullWidth
             variant="contained"

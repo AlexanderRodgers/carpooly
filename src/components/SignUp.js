@@ -13,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+//firebase
+import { auth } from '../firebase';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -60,18 +63,32 @@ const SignUp = () => {
       setEmailError(true);
       return;
     }
+
+    auth.createUserWithEmailAndPassword(email, pass)
+    .then(cred => {
+      let user = cred.user;
+      user.updateProfile({
+        displayName: `${first} ${last}`
+      });
+    }).catch(e => {
+      const errorCode = e.code;
+      const message =  e.message;
+      if (errorCode === 'auth/weak-password') {
+        alert('Your password is too weak.');
+      } else {
+        alert(message);
+      }
+    });
   }
 
-  const updateDisabled = () => {
+  // update the disabled state
+  useEffect(() => {
     if (first && last && email && pass) {
-      setDisabled(false);
+      if (disabled) setDisabled(false);
+      return;
     }
     if (!disabled) setDisabled(true);
-  }
-
-  useEffect(() => {
-    updateDisabled();
-  }, [first, last, email, pass]);
+  }, [first, last, email, pass, disabled]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -83,7 +100,6 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -166,7 +182,6 @@ const SignUp = () => {
               </Link>
             </Grid>
           </Grid>
-        </form>
       </div>
       <Box mt={5}>
         <Copyright />
