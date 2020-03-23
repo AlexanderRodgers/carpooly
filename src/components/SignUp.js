@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -50,8 +50,28 @@ const SignUp = () => {
    const [first, setFirst] = useState('');
    const [last, setLast] = useState('');
    const [email, setEmail] = useState('');
+   const [emailError, setEmailError] = useState(false);
    const [pass, setPass] = useState('');
+   const [disabled, setDisabled] = useState(false);
   const classes = useStyles();
+
+  const submit = () => {
+    if (!email.includes('@calpoly.edu')) {
+      setEmailError(true);
+      return;
+    }
+  }
+
+  const updateDisabled = () => {
+    if (first && last && email && pass) {
+      setDisabled(false);
+    }
+    if (!disabled) setDisabled(true);
+  }
+
+  useEffect(() => {
+    updateDisabled();
+  }, [first, last, email, pass]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -63,7 +83,7 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -94,6 +114,8 @@ const SignUp = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                error={emailError}
+                helperText="Please use your cal poly email address."
                 variant="outlined"
                 required
                 fullWidth
@@ -127,11 +149,13 @@ const SignUp = () => {
             </Grid>
           </Grid>
           <Button
+            disabled={disabled}
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={() => submit()}
           >
             Sign Up
           </Button>
