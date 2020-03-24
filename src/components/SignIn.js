@@ -13,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+// firebase
+import firebase, { auth } from '../firebase';
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -50,7 +53,24 @@ const SignIn = () => {
   const [disabled, setDisabled] = useState(false);
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [check, setCheck] = useState(false);
   const classes = useStyles();
+
+  const submit = () => {
+    let persistance;
+    if (!check) {
+      persistance = firebase.auth.Auth.Persistence.NONE;
+    } else {
+      persistance = firebase.auth.Auth.Persistence.SESSION;
+    }
+    auth.setPersistence(persistance).then(() => {
+      return auth.signInWithEmailAndPassword(email, pass)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(e => console.log(e));
+    })
+  }
 
   // update the disabled state
   useEffect(() => {
@@ -71,7 +91,6 @@ const SignIn = () => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
           <TextField
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -99,7 +118,7 @@ const SignIn = () => {
             autoComplete="current-password"
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox onChange={(e) => setCheck(e.target.value)} value={check} color="primary" />}
             label="Remember me"
           />
           <Button
@@ -109,6 +128,7 @@ const SignIn = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={() => submit()}
           >
             Sign In
           </Button>
@@ -124,7 +144,6 @@ const SignIn = () => {
               </Link>
             </Grid>
           </Grid>
-        </form>
       </div>
       <Box mt={8}>
         <Copyright />
