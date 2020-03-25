@@ -4,5 +4,10 @@
    font-weight: 600;
    font-size: 3rem;
    margin-block-start: 0;
-   margin-block-end: 0;
+   margin-block-end: 0.5rem;
+}
+
+.title-subheader {
+   font-weight: 300;
+   font-size: 1.5rem;
 }
