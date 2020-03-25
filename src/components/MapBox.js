@@ -64,11 +64,11 @@ const styles = {
    }, [map]);
 
    useEffect(() => {
-      firebase.firestore().collection('routes').add({
-         origin,
-         destination: dest,
-         waypoints
-      })
+      // firebase.firestore().collection('routes').add({
+      //    origin,
+      //    destination: dest,
+      //    waypoints
+      // });
    }, [waypoints]);
 
    return <div ref={el => (mapContainer.current = el)} style={styles}></div>
