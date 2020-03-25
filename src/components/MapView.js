@@ -26,13 +26,14 @@ const MapView = () => {
       if (!active) return undefined;
       (async () => {
          const res = await location(search);
-         console.log(res.features);
          setLoading(false);
          if (active) {
+            console.log(res.features);
             setOptions(res.features);
          }
       })();
       return () => {
+         active = false;
          setLoading(false);
       };
     }, [search]);
@@ -40,7 +41,6 @@ const MapView = () => {
    return (
       <div>
          <Autocomplete
-            onInputChange={(event, value) => setSearch(value)}
             open={open}
             freeSolo
             onOpen={() => {
@@ -49,15 +49,18 @@ const MapView = () => {
             onClose={() => {
             setOpen(false);
             }}
-            getOptionSelected={(option, value) => option.place_name === value.place_name}
+            filterOptions={x => x}
+            getOptionSelected={(option, value) => option.text === value.text}
             getOptionLabel={option => option.place_name}
             options={options ? options : []}
             loading={loading}
+            includeInputInList
             renderInput={params => (
             <TextField
                {...params}
                label="Choose a starting place"
                variant="outlined"
+               onChange={(event) => setSearch(event.target.value)}
                InputProps={{
                   ...params.InputProps,
                   endAdornment: (
@@ -74,6 +77,7 @@ const MapView = () => {
                let text, substr;
                const setBold = () => {
                   start = option.text.indexOf(search);
+                  stop = search.length;
                   if (start === -1) {
                      text = option.text;
                      substr = '';
@@ -84,20 +88,30 @@ const MapView = () => {
                      return;
                   }
                }
+               let contextString;
+               const getcontext = () => {
+                  if (option.place_name.includes(',')) {
+                     contextString = option.place_name.slice(option.place_name.indexOf(',')+1);
+                     return;
+                  }
+                  contextString = '';
+               }
+               getcontext();
                setBold();
 
                return (
                   <Grid container alignItems="center">
                      <Grid item xs>
+                        {text}{substr}
                         <Typography variant="body2" color="textSecondary">
-                           {text}{substr}
+                           {contextString}
                         </Typography>
                      </Grid>
                   </Grid>
                );
             }}
          />
-         {/* <MapBox></MapBox> */}
+         <MapBox></MapBox>
       </div>
    );
 
