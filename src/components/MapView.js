@@ -1,116 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MapBox from './MapBox';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { location } from '../api/search';
+import SearchBar from './SearchBar';
 
 const MapView = () => {
-   const [search, setSearch] = useState('');
-   const [open, setOpen] = useState(false);
-   const [options, setOptions] = useState([]);
-   const [loading, setLoading] = useState(false);
-  
-   // runs on open
-    useEffect(() => {
-      if (!open) {
-        setOptions([]);
-      }
-    }, [open]);
+   
+   const [start, setStart] = useState({});
 
-    useEffect(() => {
-      let active = true;
-      setLoading(true);
-      if (!active) return undefined;
-      (async () => {
-         const res = await location(search);
-         setLoading(false);
-         if (active) {
-            console.log(res.features);
-            setOptions(res.features);
-         }
-      })();
-      return () => {
-         active = false;
-         setLoading(false);
-      };
-    }, [search]);
+   const getOptionSelected = (option) => {
+      console.log(option);
+      setStart(option);
+   }
 
    return (
       <div>
-         <Autocomplete
-            open={open}
-            freeSolo
-            onOpen={() => {
-            setOpen(true);
-            }}
-            onClose={() => {
-            setOpen(false);
-            }}
-            filterOptions={x => x}
-            getOptionSelected={(option, value) => option.text === value.text}
-            getOptionLabel={option => option.place_name}
-            options={options ? options : []}
-            loading={loading}
-            includeInputInList
-            renderInput={params => (
-            <TextField
-               {...params}
-               label="Choose a starting place"
-               variant="outlined"
-               onChange={(event) => setSearch(event.target.value)}
-               InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                  <React.Fragment>
-                     {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                     {params.InputProps.endAdornment}
-                  </React.Fragment>
-                  ),
-               }}
-            />
-            )}
-            renderOption={option => {
-               let start, stop;
-               let text, substr;
-               const setBold = () => {
-                  start = option.text.indexOf(search);
-                  stop = search.length;
-                  if (start === -1) {
-                     text = option.text;
-                     substr = '';
-                     return;
-                  } else {
-                     text = <b>{option.text.substring(start,stop)}</b>;
-                     substr = option.text.substring(stop);
-                     return;
-                  }
-               }
-               let contextString;
-               const getcontext = () => {
-                  if (option.place_name.includes(',')) {
-                     contextString = option.place_name.slice(option.place_name.indexOf(',')+1);
-                     return;
-                  }
-                  contextString = '';
-               }
-               getcontext();
-               setBold();
-
-               return (
-                  <Grid container alignItems="center">
-                     <Grid item xs>
-                        {text}{substr}
-                        <Typography variant="body2" color="textSecondary">
-                           {contextString}
-                        </Typography>
-                     </Grid>
-                  </Grid>
-               );
-            }}
-         />
+         <SearchBar getStart={getOptionSelected}></SearchBar>
          <MapBox></MapBox>
       </div>
    );
