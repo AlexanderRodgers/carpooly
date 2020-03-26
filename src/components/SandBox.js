@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import SearchBar from './SearchBar';
 import DateFnsUtils from '@date-io/date-fns';
 import styled from 'styled-components';
@@ -15,9 +11,9 @@ import {
    KeyboardTimePicker,
    KeyboardDatePicker,
  } from '@material-ui/pickers';
-import './SandBox.css';
+import './GiveRide.css';
 
-const StyledButton = styled(({ background, ...other }) => <Button {...other} />)`
+ const StyledButton = styled(({ background, ...other }) => <Button {...other} />)`
    font-family: 'Dosis', sans-serif;
    font-weight: 600px;
    font-size: 18px;
@@ -36,16 +32,15 @@ const StyledButton = styled(({ background, ...other }) => <Button {...other} />)
    }
 `;
 
-const SandBox = () => {
+const SandBox = (props) => {
 
-   const [checked, setChecked] = useState(false);
+   const [checked, setChecked] = useState(true);
    const [date, setDate] = useState(new Date());
    const [time, setTime] = useState(new Date());
-   const [seats, setSeats] = useState();
 
    return (
-      <div className="ride-form">
-         <Grid md={4} xs={12} item>
+      <div>
+         <Grid className="ride-form" md={4} xs={12} item style={{backgroundColor:"white"}}>
             <Grid item xs={12} className="searchbar">
                <SearchBar label="Choose a start location"></SearchBar>
             </Grid>
@@ -58,22 +53,6 @@ const SandBox = () => {
                   control={<Switch checked={checked} onChange={() => setChecked(!checked)}/>}
                   label={checked ? 'Get a Ride' : 'Give a Ride'}
                />
-               <FormControl style={{width:'50%'}}>
-            <InputLabel id="seat-select">Number of Seats</InputLabel>
-            <Select
-                  labelId="seat-select"
-                  id="demo-simple-select"
-                  value={seats}
-                  onChange={(seats) => setSeats(seats)}
-            >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={3}>4</MenuItem>
-                  <MenuItem value={3}>5</MenuItem>
-                  <MenuItem value={3}>6</MenuItem>
-            </Select>
-            </FormControl>
             </div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                <div class="option-pickers">
@@ -98,7 +77,7 @@ const SandBox = () => {
                <StyledButton 
                   background="#1089d4"
                   style={{width:"95%", margin:"auto"}}
-                  ><b>Add Ride</b></StyledButton>
+                  ><b>Add Request</b></StyledButton>
             </div>
          </Grid>
       </div>

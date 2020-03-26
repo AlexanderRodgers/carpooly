@@ -11,8 +11,8 @@ const styles = {
 
  const MapBox = (props) => {
    const [map, setMap] = useState(null);
-   const [geoJson, setGeoJson] = useState(null);
-   const [markers, setMarkers] = useState(null);
+   const [startMarker, setStartMarker] = useState({});
+   const [destMarker, setDestMarker] = useState({});
    const mapContainer = useRef(null);
 
    useEffect(() => {
@@ -37,17 +37,28 @@ const styles = {
    }, [map]);
 
    useEffect(() => {
-      setGeoJson(props.geoJson);
       if (!map) return;
-      console.log(props.geoJson);
-      props.geoJson.forEach(el => {
-         if (Object.keys(el).length !== 0) {
-            new mapboxgl.Marker()
-               .setLngLat(el.geometry.coordinates)
-               .addTo(map);
-         } 
-      });
-   }, [props.geoJson]);
+      if (Object.keys(startMarker).length !== 0) {
+         startMarker.remove();
+      }
+      map.flyTo({center: props.start.geometry.coordinates});
+      let marker = new mapboxgl.Marker()
+         .setLngLat(props.start.geometry.coordinates)
+         .addTo(map);
+      setStartMarker(marker);
+   }, [props.start]);
+
+   useEffect(() => {
+      if (!map) return;
+      if (Object.keys(destMarker).length !== 0) {
+         destMarker.remove();
+      }
+      map.flyTo({center: props.dest.geometry.coordinates});
+      let marker = new mapboxgl.Marker({ color: '#B22222' })
+         .setLngLat(props.dest.geometry.coordinates)
+         .addTo(map);
+      setDestMarker(marker);
+   }, [props.dest]);
 
    return <div ref={el => (mapContainer.current = el)} style={styles}></div>
  }

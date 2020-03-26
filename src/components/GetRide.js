@@ -36,21 +36,20 @@ import './GiveRide.css';
    }
 `;
 
-const GiveRide = (props) => {
+const GetRide = (props) => {
 
-   const [checked, setChecked] = useState(false);
+   const [checked, setChecked] = useState(true);
    const [date, setDate] = useState(new Date());
    const [time, setTime] = useState(new Date());
-   const [seats, setSeats] = useState();
 
    return (
-      <div >
+      <div>
          <Grid className="ride-form" md={3} xs={12} item style={{backgroundColor:"white"}}>
             <Grid item xs={12} className="searchbar">
-               <SearchBar label="Choose a start location" getOption={props.getStart}></SearchBar>
+               <SearchBar label="Choose a start location"></SearchBar>
             </Grid>
             <Grid item xs={12} className="searchbar">
-               <SearchBar label="Choose a destination" getOption={props.getDest}></SearchBar>
+               <SearchBar label="Choose a destination"></SearchBar>
             </Grid>
             <div class="option-pickers">
                <FormControlLabel
@@ -58,26 +57,6 @@ const GiveRide = (props) => {
                   control={<Switch checked={checked} onChange={() => setChecked(!checked)}/>}
                   label={checked ? 'Get a Ride' : 'Give a Ride'}
                />
-            {!checked ?
-               <FormControl style={{width:'50%'}}>
-            <InputLabel id="seat-select">Number of Seats</InputLabel>
-            <Select
-                  labelId="seat-select"
-                  id="demo-simple-select"
-                  value={seats}
-                  onChange={(seats) => setSeats(seats)}
-            >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={3}>4</MenuItem>
-                  <MenuItem value={3}>5</MenuItem>
-                  <MenuItem value={3}>6</MenuItem>
-            </Select>
-            </FormControl>
-            :
-            <div style={{width: '50%'}}></div>
-         }
             </div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                <div class="option-pickers">
@@ -102,11 +81,11 @@ const GiveRide = (props) => {
                <StyledButton 
                   background="#1089d4"
                   style={{width:"95%", margin:"auto"}}
-                  ><b>{checked ? 'Request Ride' : 'Add Ride'}</b></StyledButton>
+                  ><b>Add Request</b></StyledButton>
             </div>
          </Grid>
       </div>
    );
 };
 
-export default GiveRide;
+export default GetRide;
