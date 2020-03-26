@@ -5,6 +5,7 @@ import MapView from './components/MapView';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import Home from './components/Home';
+import SandBox from './components/SandBox';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" component={SignIn}></Route>
         <Route path="/sign-up" component={SignUp}></Route>
         <Route path="/map" component={MapView}></Route>
+        <Route path="/sandbox" component={SandBox}></Route>
       </Switch>
     </Router>
   );

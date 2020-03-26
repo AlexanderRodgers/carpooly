@@ -5,8 +5,7 @@ import Switch from '@material-ui/core/Switch';
 import SearchBar from './SearchBar';
 import './MapView.css';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
-
+import Card from '@material-ui/core/Card';
 
 const MapView = () => {
    
@@ -63,6 +62,13 @@ const MapView = () => {
             label={checked ? 'Get a Ride' : 'Give a ride'}
          />
          </Grid>
+         <Grid container>
+         <Grid item xs={4}>
+            <Card>
+               Hello
+            </Card>
+         </Grid>
+      </Grid>
          <MapBox geoJson={geoJson}></MapBox>
       </div>
    );

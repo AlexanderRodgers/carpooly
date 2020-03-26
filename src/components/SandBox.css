@@ -1,0 +1,33 @@
+.ride-form {
+   z-index: 100;
+}
+
+.option-pickers {
+   display: flex;
+   justify-content: space-evenly;
+}
+
+@media (min-width: 200px) {
+   .ride-form {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+   }
+
+   .date-picker {
+      width: 45%;
+   }
+
+   .time-picker {
+      width: 45%;
+   }
+}
+
+@media (min-width: 960px) {
+   .ride-form {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+   }
+}
