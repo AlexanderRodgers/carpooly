@@ -112,7 +112,7 @@ const SearchBar = (props) => {
                setBold();
 
                return (
-                  <Grid container alignItems="center" onClick={() => props.getStart(option)}>
+                  <Grid container alignItems="center" onClick={() => props.getOption(option)}>
                      <Grid item xs>
                         {text}{substr}
                         <Typography variant="body2" color="textSecondary">
