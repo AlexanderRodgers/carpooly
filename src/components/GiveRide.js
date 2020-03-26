@@ -15,9 +15,8 @@ import {
    KeyboardTimePicker,
    KeyboardDatePicker,
  } from '@material-ui/pickers';
-import './SandBox.css';
 
-const StyledButton = styled(({ background, ...other }) => <Button {...other} />)`
+ const StyledButton = styled(({ background, ...other }) => <Button {...other} />)`
    font-family: 'Dosis', sans-serif;
    font-weight: 600px;
    font-size: 18px;
@@ -36,7 +35,7 @@ const StyledButton = styled(({ background, ...other }) => <Button {...other} />)
    }
 `;
 
-const SandBox = () => {
+const GiveRide = () => {
 
    const [checked, setChecked] = useState(false);
    const [date, setDate] = useState(new Date());
@@ -105,4 +104,4 @@ const SandBox = () => {
    );
 };
 
-export default SandBox;
+export default GiveRide;
