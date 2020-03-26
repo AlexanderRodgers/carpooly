@@ -12,6 +12,10 @@ const SearchBar = (props) => {
    const [open, setOpen] = useState(false);
    const [options, setOptions] = useState([]);
    const [loading, setLoading] = useState(false);
+
+   const getLabel = () => {
+      return props.label;
+   }
   
    // runs on open
     useEffect(() => {
@@ -48,8 +52,9 @@ const SearchBar = (props) => {
             onClose={() => {
             setOpen(false);
             }}
+            size="small"
             filterOptions={x => x}
-            getOptionSelected={(option, value) => option.text === value.text }
+            getOptionSelected={(option, value) => option.place_name === value.place_name }
             getOptionLabel={option => option.place_name}
             options={options ? options : []}
             loading={loading}
@@ -57,7 +62,7 @@ const SearchBar = (props) => {
             renderInput={params => (
             <TextField
                {...params}
-               label="Choose a starting place"
+               label={getLabel()}
                variant="outlined"
                onChange={(event) => setSearch(event.target.value)}
                InputProps={{
@@ -75,15 +80,23 @@ const SearchBar = (props) => {
                let start, stop;
                let text, substr;
                const setBold = () => {
-                  start = option.text.indexOf(search);
+                  start = option.place_name.indexOf(search);
                   stop = search.length;
                   if (start === -1) {
-                     text = option.text;
+                     if (option.place_name.indexOf(',') !== -1) {
+                        text = option.place_name.substring(0, option.place_name.indexOf(','));
+                     } else {
+                        text = option.place_name;
+                     }
                      substr = '';
                      return;
                   } else {
-                     text = <b>{option.text.substring(start,stop)}</b>;
-                     substr = option.text.substring(stop);
+                     text = <b>{option.place_name.substring(start,stop)}</b>;
+                     if (option.place_name.indexOf(',') !== -1) {
+                        substr = option.place_name.substring(stop, option.place_name.indexOf(','));
+                     } else {
+                        substr = option.place_name.substring(stop);
+                     }
                      return;
                   }
                }
