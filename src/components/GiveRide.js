@@ -41,7 +41,7 @@ const GiveRide = (props) => {
    const [checked, setChecked] = useState(false);
    const [date, setDate] = useState(new Date());
    const [time, setTime] = useState(new Date());
-   const [seats, setSeats] = useState();
+   const [seats, setSeats] = useState(1);
 
    return (
       <div >
@@ -52,7 +52,7 @@ const GiveRide = (props) => {
             <Grid item xs={12} className="searchbar">
                <SearchBar label="Choose a destination" getOption={props.getDest}></SearchBar>
             </Grid>
-            <div class="option-pickers">
+            <div className="option-pickers">
                <FormControlLabel
                   style={{verticalAlign: "top", display: "inline", alignItems: "inherit"}} 
                   control={<Switch checked={checked} onChange={() => setChecked(!checked)}/>}

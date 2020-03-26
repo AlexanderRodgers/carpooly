@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from "mapbox-gl";
+import { route } from '../api/search';
 // import firebase from '../firebase';
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -11,6 +12,8 @@ const styles = {
 
  const MapBox = (props) => {
    const [map, setMap] = useState(null);
+   const [start, setStart] = useState({});
+   const [dest, setDest] = useState({});
    const [startMarker, setStartMarker] = useState({});
    const [destMarker, setDestMarker] = useState({});
    const mapContainer = useRef(null);
@@ -46,6 +49,7 @@ const styles = {
          .setLngLat(props.start.geometry.coordinates)
          .addTo(map);
       setStartMarker(marker);
+      setStart(props.start);
    }, [props.start]);
 
    useEffect(() => {
@@ -58,7 +62,19 @@ const styles = {
          .setLngLat(props.dest.geometry.coordinates)
          .addTo(map);
       setDestMarker(marker);
+      setDest(props.dest);
    }, [props.dest]);
+
+   useEffect(() => {
+      (async() => {
+         if (Object.keys(start).length !== 0 && Object.keys(dest).length !== 0) {
+            const startGeo = start.geometry.coordinates;
+            const destGeo = dest.geometry.coordinates;
+            let res = await route([startGeo, destGeo]);
+            console.log(res);
+         }
+      })();
+   }, [start, dest]);
 
    return <div ref={el => (mapContainer.current = el)} style={styles}></div>
  }
