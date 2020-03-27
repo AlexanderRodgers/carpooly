@@ -4,7 +4,7 @@ const TOKEN = 'pk.eyJ1IjoiYWxleHJvZGdlcnMiLCJhIjoiY2s4MjlxMWZzMDh0dzNlbnpxaXd4M3
 
 const locUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
 
-const routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/';
+const routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving-traffic/';
 
 export const location = async (input) => {
   if (!input) return {};

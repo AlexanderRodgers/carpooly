@@ -12,6 +12,7 @@ const styles = {
 
  const MapBox = (props) => {
    const [map, setMap] = useState(null);
+   const [isRoute, setIsRoute] = useState(false);
    const [start, setStart] = useState({});
    const [dest, setDest] = useState({});
    const [startMarker, setStartMarker] = useState({});
@@ -33,6 +34,24 @@ const styles = {
             setMap(map);
             map.resize();
          });
+
+         // map.on('click', (e) => {
+         //    let features = map.queryRenderedFeatures(e.point, {
+         //       layers: ['route']
+         //    });
+         //    if (!features.length) {
+         //       return;
+         //    }
+         //    let feature = features[0];
+         //    console.log(features);
+         //    console.log(feature);
+         //    if (Object.keys(dest).length !== 0) {
+         //       new mapboxgl.Popup({ offset: [0, 15] })
+         //       .setLngLat(feature.geometry.coordinates)
+         //       .setHTML('<h2>Route</h2>')
+         //       .addTo(map);
+         //    }
+         // });
 
       };
 
@@ -71,7 +90,36 @@ const styles = {
             const startGeo = start.geometry.coordinates;
             const destGeo = dest.geometry.coordinates;
             let res = await route([startGeo, destGeo]);
-            console.log(res);
+            if (isRoute) {
+               map.removeLayer('route');
+               map.removeSource('route');
+               setIsRoute(false);
+            }
+            map.addSource('route', {
+               type: 'geojson',
+               data: {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                     type: 'LineString',
+                     coordinates: res.routes[0].geometry.coordinates
+                  }
+               }
+            });
+            map.addLayer({
+               id: 'route',
+               type: 'line',
+               source: 'route',
+               layout: {
+                  'line-join': 'round',
+                  'line-cap': 'round'
+               },
+               paint: {
+                  'line-color': '#888',
+                  'line-width': 7
+               }
+            });
+            setIsRoute(true);
          }
       })();
    }, [start, dest]);
