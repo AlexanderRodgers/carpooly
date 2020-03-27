@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from "mapbox-gl";
 import { route } from '../api/search';
+import { db } from '../firebase';
 // import firebase from '../firebase';
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -22,6 +23,16 @@ const styles = {
    useEffect(() => {
       mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleHJvZGdlcnMiLCJhIjoiY2s4MjlxMWZzMDh0dzNlbnpxaXd4M3k5diJ9.1VPthZmgxhtKulM9ifl16g';
 
+      const addMarker = (coords, options) => {
+         if (typeof options !== "undefined") {
+            
+         } else {
+            new mapboxgl.Marker()
+               .setLngLat(coords)
+               .addTo(map);
+         }
+      }
+
       const initializeMap = ({ setMap, mapContainer}) => {
          const map = new mapboxgl.Map({
             container: mapContainer.current,
@@ -35,24 +46,23 @@ const styles = {
             map.resize();
          });
 
-         // map.on('click', (e) => {
-         //    let features = map.queryRenderedFeatures(e.point, {
-         //       layers: ['route']
-         //    });
-         //    if (!features.length) {
-         //       return;
-         //    }
-         //    let feature = features[0];
-         //    console.log(features);
-         //    console.log(feature);
-         //    if (Object.keys(dest).length !== 0) {
-         //       new mapboxgl.Popup({ offset: [0, 15] })
-         //       .setLngLat(feature.geometry.coordinates)
-         //       .setHTML('<h2>Route</h2>')
-         //       .addTo(map);
-         //    }
-         // });
 
+         map.on('load', () => {
+            db.collection('rides')
+               .get()
+               .then((snapshots) => {
+                  snapshots.forEach((doc) => {
+                     new mapboxgl.Marker()
+                        .setLngLat(doc.data().start)
+                        .addTo(map);
+                     new mapboxgl.Marker({ color: '#B22222' })
+                        .setLngLat(doc.data().dest)
+                        .addTo(map);
+                  });
+               })
+               .catch(e => console.error(e));
+         })
+         
       };
 
       if (!map) initializeMap({ setMap, mapContainer });

@@ -101,6 +101,7 @@ const GiveRide = (props) => {
                number
             }).then(res => console.log(res));
          } else {
+            // rider flow
             db.collection('rides').add({
                userId: user.uid,
                start: start.geometry.coordinates,
@@ -109,7 +110,6 @@ const GiveRide = (props) => {
                time,
                number
             }).then(res => console.log(res));
-            // rider flow
          }
       } 
    }
