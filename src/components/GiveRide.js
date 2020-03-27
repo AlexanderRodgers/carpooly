@@ -14,6 +14,7 @@ import styled from 'styled-components';
 import { UserContext } from './UserContext';
 import MaskedInput from 'react-text-mask';
 import PropTypes from 'prop-types';
+import { db } from '../firebase';
 import {
    MuiPickersUtilsProvider,
    KeyboardTimePicker,
@@ -66,17 +67,50 @@ const GiveRide = (props) => {
    const [date, setDate] = useState(new Date());
    const [time, setTime] = useState(new Date());
    const [seats, setSeats] = useState(1);
+   const [start, setStart] = useState({});
+   const [dest, setDest] = useState({});
    const [number, setNumber] = useState('(1  )    -    ');
 
    const handleChange = event => {
       setNumber(event.target.value);
    }
 
+   const handleStart = option => {
+      setStart(option);
+      props.getStart(option);
+   }
+
+   const handleDest = option => {
+      setDest(option);
+      props.getDest(option);
+   }
+
    const user = useContext(UserContext);
 
    const submit = () => {
-      if (!user) {
-         
+      if (start && dest) {
+         // driver flow
+         if (!checked) {
+            db.collection('drives').add({
+               userId: user.uid,
+               start: start.geometry.coordinates,
+               dest: dest.geometry.coordinates,
+               date,
+               time,
+               seats,
+               number
+            }).then(res => console.log(res));
+         } else {
+            db.collection('rides').add({
+               userId: user.uid,
+               start: start.geometry.coordinates,
+               dest: dest.geometry.coordinates,
+               date,
+               time,
+               number
+            }).then(res => console.log(res));
+            // rider flow
+         }
       } 
    }
 
@@ -84,10 +118,10 @@ const GiveRide = (props) => {
       <div>
          <Grid className="ride-form" md={3} xs={12} item style={{backgroundColor:"white"}}>
             <Grid item xs={12} className="searchbar">
-               <SearchBar label="Choose a start location" getOption={props.getStart}></SearchBar>
+               <SearchBar label="Choose a start location" getOption={handleStart}></SearchBar>
             </Grid>
             <Grid item xs={12} className="searchbar">
-               <SearchBar label="Choose a destination" getOption={props.getDest}></SearchBar>
+               <SearchBar label="Choose a destination" getOption={handleDest}></SearchBar>
             </Grid>
             <div className="option-pickers">
                <FormControlLabel
@@ -97,23 +131,22 @@ const GiveRide = (props) => {
                />
             {!checked ?
                <FormControl style={{width:'50%'}}>
-            <InputLabel id="seat-select">Number of Seats</InputLabel>
-            <Select
-                  labelId="seat-select"
-                  id="demo-simple-select"
-                  value={seats}
-                  onChange={(seats) => setSeats(seats)}
-            >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={3}>4</MenuItem>
-                  <MenuItem value={3}>5</MenuItem>
-                  <MenuItem value={3}>6</MenuItem>
-            </Select>
-            </FormControl>
+               <InputLabel id="seat-select">Number of Seats</InputLabel>
+               <Select
+                     labelId="seat-select"
+                     value={seats}
+                     onChange={(e) => setSeats(e.target.value)}
+               >
+                     <MenuItem value={1}>1</MenuItem>
+                     <MenuItem value={2}>2</MenuItem>
+                     <MenuItem value={3}>3</MenuItem>
+                     <MenuItem value={4}>4</MenuItem>
+                     <MenuItem value={5}>5</MenuItem>
+                     <MenuItem value={6}>6</MenuItem>
+               </Select>
+               </FormControl>
             :
-            <div style={{width: '50%'}}></div>
+               <div style={{width: '50%'}}></div>
          }
             </div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -135,16 +168,18 @@ const GiveRide = (props) => {
                   />
                </div>
             </MuiPickersUtilsProvider>
-            <FormControl className="phone-number">
-               <InputLabel htmlFor="phone-number">Phone number</InputLabel>
-               <Input
-                  value={number}
-                  onChange={(e) => handleChange(e)}
-                  id="phone-number"
-                  inputComponent={NumberTextMask}
-               />
-            </FormControl>
-            
+            <div className="button-container" style={{marginBottom:'3px'}}>
+               <FormControl className="phone-number">
+                  <InputLabel htmlFor="phone-number">Phone number</InputLabel>
+                  <Input
+                     value={number}
+                     onChange={(e) => handleChange(e)}
+                     id="phone-number"
+                     inputComponent={NumberTextMask}
+                  />
+               </FormControl>
+               <div style={{width: '45%', padding: '5px'}}></div>
+            </div>
             <div className="button-container">
                <StyledButton 
                   background="#1089d4"

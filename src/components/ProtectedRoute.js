@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { UserContext } from './UserContext';
 export const ProtectedRoute = ({ component: Component , authed, loading, ...rest }) => {
 
    if (loading) {
-      return (<div>Loadin...</div>);
+      return (<div>Loading...</div>);
    }
 
    return (
