@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-// Card Imports
+import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
@@ -25,14 +24,19 @@ const useStyles = makeStyles(theme => ({
    }
  }));
 
-const RideCard = () => {
+const RideCard = (props) => {
 
    const [expanded, setExpanded] = useState(false);
+   // const [docData, setDocData] = useState({});
+
+   // useEffect(() => {
+   //    setDocData(props.data);
+   // }, [props.data]);
 
    const classes = useStyles();
 
    return (
-      <Card style={{margin: '0px 5px', flex: 1}} >  
+      <Card style={{margin: '0px 5px', flex: 1}} key={props.index}>  
          <CardHeader
             style={{paddingBottom: '0px'}}
             avatar={
@@ -40,7 +44,7 @@ const RideCard = () => {
                   A
                </Avatar>
             }
-            title="Alex Rodgers"
+            title={props.data.number}
             subheader="Tiburon, CA - March 30th 8:00 AM"
          />
          <CardActions>

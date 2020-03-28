@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -21,7 +21,7 @@ import {
    KeyboardDatePicker,
  } from '@material-ui/pickers';
 import './GiveRide.css';
-
+import RideCard from './RideCard';
 const NumberTextMask = (props) => {
    const { inputRef, ...other } = props;
  
@@ -69,6 +69,7 @@ const GiveRide = (props) => {
    const [seats, setSeats] = useState(1);
    const [start, setStart] = useState({});
    const [dest, setDest] = useState({});
+   const [cards, setCards] = useState([]);
    const [number, setNumber] = useState('(1  )    -    ');
 
    const handleChange = event => {
@@ -114,78 +115,102 @@ const GiveRide = (props) => {
       } 
    }
 
+   useEffect(() => {
+      const height = document.getElementById('loc-grid').clientHeight;
+      console.log('objheight', height);
+      const windowHeight = window.innerHeight;
+      console.log('win-height', windowHeight);
+      document.getElementById('scroll-cards').style.height = `${windowHeight - height}px`
+   }, []);
+
+   useEffect(() => {
+      if (Object.keys(props.rideSnaps).length === 0) return;
+      let rides = props.rideSnaps;
+      let cards = [];
+      rides.forEach((doc) => {
+         cards.push(<RideCard data={doc.data()}></RideCard>);
+      })
+      setCards(cards);
+
+   }, [props.rideSnaps]);
+
    return (
       <div>
-         <Grid className="ride-form" md={3} xs={12} item style={{backgroundColor:"white"}}>
-            <Grid item xs={12} className="searchbar">
-               <SearchBar label="Choose a start location" getOption={handleStart}></SearchBar>
-            </Grid>
-            <Grid item xs={12} className="searchbar">
-               <SearchBar label="Choose a destination" getOption={handleDest}></SearchBar>
-            </Grid>
-            <div className="option-pickers">
-               <FormControlLabel
-                  style={{verticalAlign: "top", display: "inline", alignItems: "inherit"}} 
-                  control={<Switch checked={checked} onChange={() => setChecked(!checked)}/>}
-                  label={checked ? 'Get a Ride' : 'Give a Ride'}
-               />
-            {!checked ?
-               <FormControl style={{width:'50%'}}>
-               <InputLabel id="seat-select">Number of Seats</InputLabel>
-               <Select
-                     labelId="seat-select"
-                     value={seats}
-                     onChange={(e) => setSeats(e.target.value)}
-               >
-                     <MenuItem value={1}>1</MenuItem>
-                     <MenuItem value={2}>2</MenuItem>
-                     <MenuItem value={3}>3</MenuItem>
-                     <MenuItem value={4}>4</MenuItem>
-                     <MenuItem value={5}>5</MenuItem>
-                     <MenuItem value={6}>6</MenuItem>
-               </Select>
-               </FormControl>
-            :
-               <div style={{width: '50%'}}></div>
-         }
-            </div>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+         <Grid className="ride-form" id="ride-form" md={3} xs={12} item style={{backgroundColor:"white"}}>
+            <div id="loc-grid">
+               <Grid item xs={12} className="searchbar">
+                  <SearchBar label="Choose a start location" getOption={handleStart}></SearchBar>
+               </Grid>
+               <Grid item xs={12} className="searchbar">
+                  <SearchBar label="Choose a destination" getOption={handleDest}></SearchBar>
+               </Grid>
                <div className="option-pickers">
-                  <KeyboardDatePicker
-                     className="date-picker"
-                     margin="normal"
-                     label="Leave Date"
-                     format="MM/dd/yyyy"
-                     value={date}
-                     onChange={(date) => setDate(date)}
+                  <FormControlLabel
+                     style={{verticalAlign: "top", display: "inline", alignItems: "inherit"}} 
+                     control={<Switch checked={checked} onChange={() => setChecked(!checked)}/>}
+                     label={checked ? 'Get a Ride' : 'Give a Ride'}
                   />
-                  <KeyboardTimePicker
-                     className="time-picker"
-                     margin="normal"
-                     label="Leave Time"
-                     value={time}
-                     onChange={(time) => setTime(time)}
-                  />
+               {!checked ?
+                  <FormControl style={{width:'50%'}}>
+                  <InputLabel id="seat-select">Number of Seats</InputLabel>
+                  <Select
+                        labelId="seat-select"
+                        value={seats}
+                        onChange={(e) => setSeats(e.target.value)}
+                  >
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                        <MenuItem value={3}>3</MenuItem>
+                        <MenuItem value={4}>4</MenuItem>
+                        <MenuItem value={5}>5</MenuItem>
+                        <MenuItem value={6}>6</MenuItem>
+                  </Select>
+                  </FormControl>
+               :
+                  <div style={{width: '50%'}}></div>
+            }
                </div>
-            </MuiPickersUtilsProvider>
-            <div className="button-container" style={{marginBottom:'3px'}}>
-               <FormControl className="phone-number">
-                  <InputLabel htmlFor="phone-number">Phone number</InputLabel>
-                  <Input
-                     value={number}
-                     onChange={(e) => handleChange(e)}
-                     id="phone-number"
-                     inputComponent={NumberTextMask}
-                  />
-               </FormControl>
-               <div style={{width: '45%', padding: '5px'}}></div>
+               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <div className="option-pickers">
+                     <KeyboardDatePicker
+                        className="date-picker"
+                        margin="normal"
+                        label="Leave Date"
+                        format="MM/dd/yyyy"
+                        value={date}
+                        onChange={(date) => setDate(date)}
+                     />
+                     <KeyboardTimePicker
+                        className="time-picker"
+                        margin="normal"
+                        label="Leave Time"
+                        value={time}
+                        onChange={(time) => setTime(time)}
+                     />
+                  </div>
+               </MuiPickersUtilsProvider>
+               <div className="button-container" style={{marginBottom:'3px'}}>
+                  <FormControl className="phone-number">
+                     <InputLabel htmlFor="phone-number">Phone number</InputLabel>
+                     <Input
+                        value={number}
+                        onChange={(e) => handleChange(e)}
+                        id="phone-number"
+                        inputComponent={NumberTextMask}
+                     />
+                  </FormControl>
+                  <div style={{width: '45%', padding: '5px'}}></div>
+               </div>
+               <div className="button-container">
+                  <StyledButton 
+                     background="#1089d4"
+                     style={{width:"95%", margin:"auto"}}
+                     onClick={() => submit()}
+                     ><b>{checked ? 'Request Ride' : 'Add Ride'}</b></StyledButton>
+               </div>
             </div>
-            <div className="button-container">
-               <StyledButton 
-                  background="#1089d4"
-                  style={{width:"95%", margin:"auto"}}
-                  onClick={() => submit()}
-                  ><b>{checked ? 'Request Ride' : 'Add Ride'}</b></StyledButton>
+            <div className="scroll-cards" id="scroll-cards">
+               {cards.length === 0 ? '' : cards}
             </div>
          </Grid>
       </div>

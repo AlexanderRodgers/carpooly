@@ -33,20 +33,20 @@ const styles = {
          map.on("load", () => {
             setMap(map);
             map.resize();
-            // db.collection('rides')
-            //    .get()
-            //    .then((snapshots) => {
-            //       snapshots.forEach((doc) => {
-            //          addPopup(map, doc.data());
-            //          new mapboxgl.Marker()
-            //             .setLngLat(doc.data().start)
-            //             .addTo(map);
-            //          new mapboxgl.Marker({ color: '#B22222' })
-            //             .setLngLat(doc.data().dest)
-            //             .addTo(map);
-            //       });
-            //    })
-            //    .catch(e => console.error(e));
+            db.collection('rides')
+               .get()
+               .then((snapshots) => {
+                  props.getRides(snapshots);
+                  snapshots.forEach((doc) => {
+                     new mapboxgl.Marker()
+                        .setLngLat(doc.data().start)
+                        .addTo(map);
+                     new mapboxgl.Marker({ color: '#B22222' })
+                        .setLngLat(doc.data().dest)
+                        .addTo(map);
+                  });
+               })
+               .catch(e => console.error(e));
          });
       };
 

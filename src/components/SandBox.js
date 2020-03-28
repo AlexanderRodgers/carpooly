@@ -75,7 +75,6 @@ const SandBox = (props) => {
    const [start, setStart] = useState({});
    const [dest, setDest] = useState({});
    const [number, setNumber] = useState('(1  )    -    ');
-   const [expanded, setExpanded] = useState(false);
 
    const handleChange = event => {
       setNumber(event.target.value);
