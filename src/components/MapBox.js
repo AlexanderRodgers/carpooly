@@ -6,9 +6,8 @@ import { db } from '../firebase';
 import "mapbox-gl/dist/mapbox-gl.css";
 
 const styles = {
-   width: "100vw",
-   height: "100vh",
-   position: "absolute"
+   width: "100%",
+   height: "100%"
  };
 
  const MapBox = (props) => {
@@ -23,17 +22,7 @@ const styles = {
    useEffect(() => {
       mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleHJvZGdlcnMiLCJhIjoiY2s4MjlxMWZzMDh0dzNlbnpxaXd4M3k5diJ9.1VPthZmgxhtKulM9ifl16g';
 
-      const addMarker = (coords, options) => {
-         if (typeof options !== "undefined") {
-            
-         } else {
-            new mapboxgl.Marker()
-               .setLngLat(coords)
-               .addTo(map);
-         }
-      }
-
-      const initializeMap = ({ setMap, mapContainer}) => {
+      const initializeMap = ({ setMap, mapContainer }) => {
          const map = new mapboxgl.Map({
             container: mapContainer.current,
             style: "mapbox://styles/mapbox/streets-v11",            
@@ -44,25 +33,21 @@ const styles = {
          map.on("load", () => {
             setMap(map);
             map.resize();
+            // db.collection('rides')
+            //    .get()
+            //    .then((snapshots) => {
+            //       snapshots.forEach((doc) => {
+            //          addPopup(map, doc.data());
+            //          new mapboxgl.Marker()
+            //             .setLngLat(doc.data().start)
+            //             .addTo(map);
+            //          new mapboxgl.Marker({ color: '#B22222' })
+            //             .setLngLat(doc.data().dest)
+            //             .addTo(map);
+            //       });
+            //    })
+            //    .catch(e => console.error(e));
          });
-
-
-         map.on('load', () => {
-            db.collection('rides')
-               .get()
-               .then((snapshots) => {
-                  snapshots.forEach((doc) => {
-                     new mapboxgl.Marker()
-                        .setLngLat(doc.data().start)
-                        .addTo(map);
-                     new mapboxgl.Marker({ color: '#B22222' })
-                        .setLngLat(doc.data().dest)
-                        .addTo(map);
-                  });
-               })
-               .catch(e => console.error(e));
-         })
-         
       };
 
       if (!map) initializeMap({ setMap, mapContainer });

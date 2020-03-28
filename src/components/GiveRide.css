@@ -36,8 +36,6 @@
 
 @media (min-width: 960px) {
    .ride-form {
-      position: absolute;
-      top: 0px;
-      left: 0px;
+      /* float: left; */
    }
 }
