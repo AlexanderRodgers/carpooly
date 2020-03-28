@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Grid from '@material-ui/core/Grid'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -7,15 +7,39 @@ import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
 import SearchBar from './SearchBar';
 import DateFnsUtils from '@date-io/date-fns';
 import styled from 'styled-components';
+import { UserContext } from './UserContext';
+import MaskedInput from 'react-text-mask';
+import PropTypes from 'prop-types';
 import {
    MuiPickersUtilsProvider,
    KeyboardTimePicker,
    KeyboardDatePicker,
  } from '@material-ui/pickers';
 import './GiveRide.css';
+
+const NumberTextMask = (props) => {
+   const { inputRef, ...other } = props;
+ 
+   return (
+     <MaskedInput
+       {...other}
+       ref={ref => {
+         inputRef(ref ? ref.inputElement : null);
+       }}
+       mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+       placeholderChar={'\u2000'}
+       showMask
+     />
+   );
+ }
+ 
+ NumberTextMask.propTypes = {
+   inputRef: PropTypes.func.isRequired,
+ };
 
  const StyledButton = styled(({ background, ...other }) => <Button {...other} />)`
    font-family: 'Dosis', sans-serif;
@@ -42,9 +66,22 @@ const GiveRide = (props) => {
    const [date, setDate] = useState(new Date());
    const [time, setTime] = useState(new Date());
    const [seats, setSeats] = useState(1);
+   const [number, setNumber] = useState('(1  )    -    ');
+
+   const handleChange = event => {
+      setNumber(event.target.value);
+   }
+
+   const user = useContext(UserContext);
+
+   const submit = () => {
+      if (!user) {
+         
+      } 
+   }
 
    return (
-      <div >
+      <div>
          <Grid className="ride-form" md={3} xs={12} item style={{backgroundColor:"white"}}>
             <Grid item xs={12} className="searchbar">
                <SearchBar label="Choose a start location" getOption={props.getStart}></SearchBar>
@@ -80,7 +117,7 @@ const GiveRide = (props) => {
          }
             </div>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-               <div class="option-pickers">
+               <div className="option-pickers">
                   <KeyboardDatePicker
                      className="date-picker"
                      margin="normal"
@@ -98,10 +135,21 @@ const GiveRide = (props) => {
                   />
                </div>
             </MuiPickersUtilsProvider>
-            <div class="button-container">
+            <FormControl className="phone-number">
+               <InputLabel htmlFor="phone-number">Phone number</InputLabel>
+               <Input
+                  value={number}
+                  onChange={(e) => handleChange(e)}
+                  id="phone-number"
+                  inputComponent={NumberTextMask}
+               />
+            </FormControl>
+            
+            <div className="button-container">
                <StyledButton 
                   background="#1089d4"
                   style={{width:"95%", margin:"auto"}}
+                  onClick={() => submit()}
                   ><b>{checked ? 'Request Ride' : 'Add Ride'}</b></StyledButton>
             </div>
          </Grid>

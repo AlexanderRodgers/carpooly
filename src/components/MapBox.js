@@ -59,7 +59,7 @@ const styles = {
    }, [map]);
 
    useEffect(() => {
-      if (!map) return;
+      if (!map || !Object.keys(props.start).length) return;
       if (Object.keys(startMarker).length !== 0) {
          startMarker.remove();
       }
@@ -72,7 +72,7 @@ const styles = {
    }, [props.start]);
 
    useEffect(() => {
-      if (!map) return;
+      if (!map || !Object.keys(props.dest).length) return;
       if (Object.keys(destMarker).length !== 0) {
          destMarker.remove();
       }

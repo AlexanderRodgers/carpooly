@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import MapBox from './MapBox';
 import GiveRide from './GiveRide';
 import './MapView.css';
-import GetRide from './GetRide';
 
 const MapView = () => {
    

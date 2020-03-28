@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useHistory } from 'react-router-dom';
 
 // firebase
 import firebase, { auth } from '../firebase';
@@ -21,7 +22,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Carpooly 
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -56,6 +57,8 @@ const SignIn = () => {
   const [check, setCheck] = useState(false);
   const classes = useStyles();
 
+  const history = useHistory();
+
   const submit = () => {
     let persistance;
     if (!check) {
@@ -64,9 +67,10 @@ const SignIn = () => {
       persistance = firebase.auth.Auth.Persistence.SESSION;
     }
     auth.setPersistence(persistance).then(() => {
+      //TODO: Inform the user if there was an error.
       return auth.signInWithEmailAndPassword(email, pass)
         .then(res => {
-          console.log(res);
+          history.push('/map');
         })
         .catch(e => console.log(e));
     })

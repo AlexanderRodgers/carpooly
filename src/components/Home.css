@@ -15,3 +15,8 @@
 .remove-button-link {
    text-decoration: none;
 }
+
+.align-item-container {
+   display: flex;
+   justify-content: space-evenly;
+}
