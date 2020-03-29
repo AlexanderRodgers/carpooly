@@ -42,6 +42,7 @@ const App = () => {
     }
     setLoading(false);
   }, [user]);
+  
   return (
     <Router>
       <Switch>

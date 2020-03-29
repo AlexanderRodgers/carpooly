@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import NavBar from './NavBar';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Footer from './Footer';
 import rideshare from '../assets/order_ride.svg';
 import { Link } from 'react-router-dom';
 import './Home.css';
@@ -56,6 +57,7 @@ const Home = () => {
                </Grid>
             </Grid>
          </section>
+         <Footer></Footer>
       </div>
    );
 }

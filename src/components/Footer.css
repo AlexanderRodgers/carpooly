@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,600&display=swap');
+
+.footer {
+   font-family: 'Dosis', sans-serif;
+   display: flex;
+   flex-flow: row-wrap;
+   padding: 30px 30px 20px 30px;
+   color: #2f2f2f;
+}
+
+.footer > * {
+   flex: 1 100%;
+}
+
+.contact {
+   margin-right: 1.25em;
+   margin-bottom: 2em;
+}
+
+.dosis {
+   font-family: 'Dosis', sans-serif;
+}
+
+.footer-nav {
+   display: flex;
+   flex-flow: row wrap;
+}
+
+.nav-title {
+   font-weight: 600;
+}
