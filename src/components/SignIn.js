@@ -64,7 +64,7 @@ const SignIn = () => {
     if (!check) {
       persistance = firebase.auth.Auth.Persistence.NONE;
     } else {
-      persistance = firebase.auth.Auth.Persistence.SESSION;
+      persistance = firebase.auth.Auth.Persistence.LOCAL;
     }
     auth.setPersistence(persistance).then(() => {
       //TODO: Inform the user if there was an error.

@@ -38,11 +38,12 @@ const styles = {
                .then((snapshots) => {
                   props.getRides(snapshots);
                   snapshots.forEach((doc) => {
+                     console.log()
                      new mapboxgl.Marker()
-                        .setLngLat(doc.data().start)
+                        .setLngLat(doc.data().start.geometry.coordinates)
                         .addTo(map);
                      new mapboxgl.Marker({ color: '#B22222' })
-                        .setLngLat(doc.data().dest)
+                        .setLngLat(doc.data().dest.geometry.coordinates)
                         .addTo(map);
                   });
                })

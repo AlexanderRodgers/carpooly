@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,6 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
+import moment from 'moment';
 
 const useStyles = makeStyles(theme => ({
    expand: {
@@ -27,16 +28,26 @@ const useStyles = makeStyles(theme => ({
 const RideCard = (props) => {
 
    const [expanded, setExpanded] = useState(false);
-   // const [docData, setDocData] = useState({});
 
-   // useEffect(() => {
-   //    setDocData(props.data);
-   // }, [props.data]);
+   const getArea = () => {
+      let areaString = '';
+      if (props.data.dest.context.length !== 0) {
+         props.data.dest.context.forEach(area => {
+            areaString += area.text + ', ';
+         });
+      }
+      return areaString;
+   }
+
+   const getTime = (date) => {
+      return moment(new Date(date.seconds * 1000)).format('hh:mm A');
+   }
 
    const classes = useStyles();
+   console.log(props.data);
 
    return (
-      <Card style={{margin: '0px 5px', flex: 1}} key={props.index}>  
+      <Card style={{margin: '0px 5px', flex: 1, marginBottom: '5px'}} key={props.key} className="ride-card">  
          <CardHeader
             style={{paddingBottom: '0px'}}
             avatar={
@@ -44,8 +55,8 @@ const RideCard = (props) => {
                   A
                </Avatar>
             }
-            title={props.data.number}
-            subheader="Tiburon, CA - March 30th 8:00 AM"
+            title={props.data.name}
+            subheader={`${getArea()} ${getTime(props.data.time)}`}
          />
          <CardActions>
             Details
@@ -60,8 +71,15 @@ const RideCard = (props) => {
          </CardActions>
          <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-               <Typography>Seats: 3</Typography>
-               <Typography>Phone number: (916) 280-4529</Typography>
+               {props.data.type === 'drive' ?
+                  <Fragment>
+                     <Typography>{props.data.name} is offering a ride</Typography>
+                     <Typography>Seats: {props.data.seats}</Typography>  
+                  </Fragment>
+               :
+                  <Typography>{props.data.name} is looking for a ride</Typography>
+               }
+               <Typography>Phone number: {props.data.number}</Typography>
             </CardContent>
          </Collapse>
       </Card>

@@ -17,11 +17,11 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     auth.onAuthStateChanged(authUser => {
-      if (authUser) {
+      if (Object.keys(authUser).length !== 0) {
         setUser(authUser);
+        setLoading(false);
       }
     });
-    setLoading(false);
   });
   return (
     <Router>

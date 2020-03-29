@@ -9,7 +9,7 @@ export const ProtectedRoute = ({ component: Component , authed, loading, ...rest
    return (
       <Route {...rest} render={
          (props) => {
-            if (authed) {
+            if (Object.keys(authed).length !== 0) {
                return <Component {...props}/>
             } else {
                return (<Redirect to={

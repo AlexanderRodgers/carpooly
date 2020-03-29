@@ -78,6 +78,7 @@ const GiveRide = (props) => {
 
    const handleStart = option => {
       setStart(option);
+      console.log(option);
       props.getStart(option);
    }
 
@@ -92,24 +93,42 @@ const GiveRide = (props) => {
       if (start && dest) {
          // driver flow
          if (!checked) {
-            db.collection('drives').add({
+            db.collection('rides').add({
                userId: user.uid,
-               start: start.geometry.coordinates,
-               dest: dest.geometry.coordinates,
+               type: 'drive',
+               start: {
+                  context: start.context ? start.context : null,
+                  geometry: start.geometry
+               },
+               dest: {
+                  context: dest.context ? dest.context : null,
+                  geometry: dest.geometry
+               },
                date,
                time,
                seats,
-               number
+               number,
+               name: user.displayName,
+               email: user.email
             }).then(res => console.log(res));
          } else {
             // rider flow
             db.collection('rides').add({
                userId: user.uid,
-               start: start.geometry.coordinates,
-               dest: dest.geometry.coordinates,
+               type: 'ride',
+               start: {
+                  context: start.context,
+                  geometry: start.geometry
+               },
+               dest: {
+                  context: dest.context,
+                  geometry: dest.geometry
+               },
                date,
                time,
-               number
+               number,
+               name: user.displayName,
+               email: user.email
             }).then(res => console.log(res));
          }
       } 
@@ -127,8 +146,8 @@ const GiveRide = (props) => {
       if (Object.keys(props.rideSnaps).length === 0) return;
       let rides = props.rideSnaps;
       let cards = [];
-      rides.forEach((doc) => {
-         cards.push(<RideCard data={doc.data()}></RideCard>);
+      rides.forEach((doc, i) => {   
+         cards.push(<RideCard data={doc.data()} key={i}></RideCard>);
       })
       setCards(cards);
 
