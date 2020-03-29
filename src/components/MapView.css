@@ -1,16 +1,26 @@
-.searchbar-grid {
-   padding: 5px;
-   position: absolute;
-   z-index: 5;
-   top: 10px;
-   left: 10px;
-   width: 100%;
-   border-radius: 4px;
+@media (min-width: 200px) {
+   .grid-container {
+      width: 100vw;
+      height: 90vh;
+   }
+
+   .map-box {
+      width: 100%;
+      height: 100%;
+   }
+
+   .give-ride {
+      margin: 0 5px;
+   }
 }
 
-.searchbar {
-   background-color: white;
-   padding: 5px;
-   border-radius:4px;
+@media (min-width: 960px) {
+   .grid-container {
+      width: 100vw;
+      height: 100vh;
+   }
 
+   .give-ride {
+      width: 100% !important;
+   }
 }

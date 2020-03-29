@@ -35,11 +35,8 @@ const SearchBar = (props) => {
          if (active) {
             setOptions(res.features);
          }
-      })();
-      return () => {
          active = false;
-         setLoading(false);
-      };
+      })();
     }, [search]);
 
    return (

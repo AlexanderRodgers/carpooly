@@ -32,15 +32,17 @@ const RideCard = (props) => {
    const getArea = () => {
       let areaString = '';
       if (props.data.dest.context.length !== 0) {
-         props.data.dest.context.forEach(area => {
-            areaString += area.text + ', ';
-         });
+         areaString = props.data.dest.context[0].text + ', ';
       }
       return areaString;
    }
 
    const getTime = (date) => {
       return moment(new Date(date.seconds * 1000)).format('hh:mm A');
+   }
+
+   const getDate = (date) => {
+      return moment(new Date(date.seconds * 1000)).format('MMM DD');
    }
 
    const classes = useStyles();
@@ -56,7 +58,7 @@ const RideCard = (props) => {
                </Avatar>
             }
             title={props.data.name}
-            subheader={`${getArea()} ${getTime(props.data.time)}`}
+            subheader={`${getArea()} ${getDate(props.data.date)} ${getTime(props.data.time)}`}
          />
          <CardActions>
             Details

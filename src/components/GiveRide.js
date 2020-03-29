@@ -135,6 +135,10 @@ const GiveRide = (props) => {
    }
 
    useEffect(() => {
+      const width = window.innerWidth;
+      // if (width < 960) {
+      //    document.getElementById('loc-grid').
+      // }
       const height = document.getElementById('loc-grid').clientHeight;
       console.log('objheight', height);
       const windowHeight = window.innerHeight;
@@ -147,7 +151,7 @@ const GiveRide = (props) => {
       let rides = props.rideSnaps;
       let cards = [];
       rides.forEach((doc, i) => {   
-         cards.push(<RideCard data={doc.data()} key={i}></RideCard>);
+         cards.push(<RideCard data={doc.data()} key={doc.uid}></RideCard>);
       })
       setCards(cards);
 
