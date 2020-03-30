@@ -7,15 +7,11 @@ const Footer = () => {
       <footer className="footer">
          <div className="contact">
             <h2>Contact me</h2>
-            <h4>aerodger@calpoly.edu</h4>
-            <h4>alexedrodgers@gmail.com</h4>
-            <h4>github.com/AlexanderRodgers</h4>
+            <h4 className="contact-info">aerodger@calpoly.edu</h4>
+            <h4 className="contact-info">alexedrodgers@gmail.com</h4>
+            <h4 className="contact-info">github.com/AlexanderRodgers</h4>
+         <span>Made with <span className="heart">♥</span></span>
          </div>
-         <ul className="footer-nav">
-            <li className="nav-item">
-               <h3 className="nav-title">Other</h3>
-            </li>
-         </ul>
       </footer>
    );
 }

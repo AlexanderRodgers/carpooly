@@ -161,7 +161,7 @@ const GiveRide = (props) => {
       <div>
          <Grid className="ride-form" id="ride-form" md={3} xs={12} item style={{backgroundColor:"white"}}>
             <div id="loc-grid">
-               <Grid item xs={12} className="searchbar">
+               <Grid item xs={12} className="searchbar" style={{marginBottom:'5px'}}>
                   <SearchBar label="Choose a start location" getOption={handleStart}></SearchBar>
                </Grid>
                <Grid item xs={12} className="searchbar">

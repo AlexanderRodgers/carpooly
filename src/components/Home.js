@@ -49,10 +49,10 @@ const Home = () => {
                </Grid>
                <Grid item xs={12} lg={6}>
                   <div style={{padding:"0px 10px"}}>
-                     <img src={rideshare} style={{height: 'auto', width: '100%'}} alt="Rideshare"/>
+                     <img src={rideshare} style={{height: 'auto', width: '100%', margin: '0px 5px'}} alt="Rideshare"/>
                   </div>
                   <Link to="/map" className="remove-button-link">
-                     <StyledButton background="#1089d4" style={{width: '100%', verticalAlign: "center"}}><b>Get a ride</b></StyledButton>
+                     <StyledButton background="#1089d4" style={{width: '100%', verticalAlign: "center", margin: '0px 5px'}}><b>Get a ride</b></StyledButton>
                   </Link>
                </Grid>
             </Grid>

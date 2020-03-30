@@ -2,6 +2,14 @@
    z-index: 100;
 }
 
+#loc-grid {
+   margin: 5px;
+}
+
+.searchbar {
+   margin-bottom: 5px;
+}
+
 .button-container {
    display: flex;
    justify-content: center;

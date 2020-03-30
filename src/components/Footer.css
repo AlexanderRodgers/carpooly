@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Dosis:300,400,600&display=swap');
 
 .footer {
+   margin-top: 10px;
    font-family: 'Dosis', sans-serif;
    display: flex;
    flex-flow: row-wrap;
    padding: 30px 30px 20px 30px;
    color: #2f2f2f;
+   background-color: #F9F9F9;
 }
 
 .footer > * {
@@ -21,11 +23,41 @@
    font-family: 'Dosis', sans-serif;
 }
 
+.contact-info {
+   margin: 2px 0px;
+}
+
 .footer-nav {
    display: flex;
    flex-flow: row wrap;
 }
 
+.footer a {
+   text-decoration: none;
+}
+
 .nav-title {
    font-weight: 600;
 }
+
+.legal {
+   font-family: 'Dosis', sans-serif;
+   display: flex;
+   flex-wrap: wrap;
+   color: #999;
+ }
+   
+ .legal__links {
+   display: flex;
+   align-items: center;
+ }
+ 
+ .heart {
+   color: #2f2f2f;
+ }
+
+@media screen and (min-width: 24.375em) {
+   .legal .legal__links {
+     margin-left: auto;
+   }
+ }
