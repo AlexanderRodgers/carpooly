@@ -10,6 +10,7 @@ const MapView = () => {
    const [dest, setDest] = useState({});
    const [width, setWidth] = useState(0);
    const [rideSnaps, setRideSnaps] = useState({});
+   const [selected, setSelected] = useState([]);
 
    const getStart = (option) => {
       option.origin = 'start';
@@ -23,6 +24,12 @@ const MapView = () => {
 
    const getRides = (snapshots) => {
       setRideSnaps(snapshots);
+   }
+
+   const passRoute = (start, dest) => {
+      console.log(start);
+      console.log(dest);
+      setSelected([start, dest]);
    }
 
    useEffect(() => {
@@ -48,10 +55,20 @@ const MapView = () => {
             <Fragment>
                <Grid container style={{width: '100vw', height: '100vh'}} className="grid-container">
                   <Grid item xs={12} md={3} className="give-ride">
-                     <GiveRide getStart={getStart} getDest={getDest} rideSnaps={rideSnaps}></GiveRide>
+                     <GiveRide 
+                        getStart={getStart} 
+                        getDest={getDest}
+                        passRoute={passRoute}
+                        rideSnaps={rideSnaps}
+                     />
                   </Grid>
                   <Grid item xs={12} md={9} className="map-box">
-                     <MapBox start={start} dest={dest} getRides={getRides}></MapBox>
+                     <MapBox 
+                        start={start}
+                        dest={dest}
+                        getRides={getRides}
+                        selected={selected}
+                     />
                   </Grid>
                </Grid>
             </Fragment>
@@ -59,10 +76,20 @@ const MapView = () => {
             <Fragment>
                <Grid container className="grid-container">
                   <Grid item className="map-box">
-                     <MapBox start={start} dest={dest} getRides={getRides}></MapBox>
+                     <MapBox
+                        start={start}
+                        dest={dest}
+                        getRides={getRides}
+                        selected={selected}
+                     />
                   </Grid>
                   <Grid item xs={12} md={3} className="give-ride">
-                     <GiveRide getStart={getStart} getDest={getDest} rideSnaps={rideSnaps}></GiveRide>
+                     <GiveRide 
+                        getStart={getStart}
+                        getDest={getDest}
+                        passRoute={passRoute}
+                        rideSnaps={rideSnaps}
+                     />
                   </Grid>
                </Grid>
             </Fragment>

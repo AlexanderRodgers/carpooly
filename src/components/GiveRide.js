@@ -152,7 +152,15 @@ const GiveRide = (props) => {
       let cards = [];
       let i = 0;
       rides.forEach(doc => {
-         cards.push(<RideCard data={doc.data()} key={`${i}-${doc.id}`} id={`${i}-${doc.id}`}></RideCard>);
+         console.log(props);
+         cards.push(
+            <RideCard 
+               data={doc.data()}
+               key={`${i}-${doc.id}`}
+               id={`${i}-${doc.id}`}
+               passRoute={props.passRoute}
+            />
+         );
          i++;
       });
       setCards(cards);

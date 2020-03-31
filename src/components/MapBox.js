@@ -17,7 +17,50 @@ const styles = {
    const [dest, setDest] = useState({});
    const [startMarker, setStartMarker] = useState({});
    const [destMarker, setDestMarker] = useState({});
+   
    const mapContainer = useRef(null);
+
+   useEffect(() => {
+      (async() => {
+         if (props.selected.length !== 0) {
+            console.log(props.selected);
+            const startGeo = props.selected[0].geometry.coordinates;
+            const destGeo = props.selected[1].geometry.coordinates;
+            let res = await route([startGeo, destGeo]);
+            map.flyTo({center: destGeo});
+            if (isRoute) {
+               map.removeLayer('route');
+               map.removeSource('route');
+               setIsRoute(false);
+            }
+            map.addSource('route', {
+               type: 'geojson',
+               data: {
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                     type: 'LineString',
+                     coordinates: res.routes[0].geometry.coordinates
+                  }
+               }
+            });
+            map.addLayer({
+               id: 'route',
+               type: 'line',
+               source: 'route',
+               layout: {
+                  'line-join': 'round',
+                  'line-cap': 'round'
+               },
+               paint: {
+                  'line-color': '#888',
+                  'line-width': 7
+               }
+            });
+            setIsRoute(true);
+         }
+      })();
+   }, [props.selected]);
 
    useEffect(() => {
       mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleHJvZGdlcnMiLCJhIjoiY2s4MjlxMWZzMDh0dzNlbnpxaXd4M3k5diJ9.1VPthZmgxhtKulM9ifl16g';

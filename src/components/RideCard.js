@@ -45,10 +45,19 @@ const RideCard = (props) => {
       return moment(new Date(date.seconds * 1000)).format('MMM DD');
    }
 
+   const getRoute = () => {
+      props.passRoute(props.data.start, props.data.dest);
+   }
+
    const classes = useStyles();
 
    return (
-      <Card style={{margin: '0px 5px', flex: 1, marginBottom: '5px'}} key={props.id} className="ride-card">  
+      <Card 
+         style={{margin: '0px 5px', flex: 1, marginBottom: '5px'}}
+         key={props.id}
+         className="ride-card"
+         onClick={() => getRoute()}
+      >  
          <CardHeader
             style={{paddingBottom: '0px'}}
             avatar={
