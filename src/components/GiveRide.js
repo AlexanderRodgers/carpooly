@@ -150,9 +150,11 @@ const GiveRide = (props) => {
       if (Object.keys(props.rideSnaps).length === 0) return;
       let rides = props.rideSnaps;
       let cards = [];
-      rides.forEach((doc, i) => {   
-         cards.push(<RideCard data={doc.data()} key={doc.uid}></RideCard>);
-      })
+      let i = 0;
+      rides.forEach(doc => {
+         cards.push(<RideCard data={doc.data()} key={`${i}-${doc.id}`} id={`${i}-${doc.id}`}></RideCard>);
+         i++;
+      });
       setCards(cards);
 
    }, [props.rideSnaps]);

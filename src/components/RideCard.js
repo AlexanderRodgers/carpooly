@@ -46,10 +46,9 @@ const RideCard = (props) => {
    }
 
    const classes = useStyles();
-   console.log(props.data);
 
    return (
-      <Card style={{margin: '0px 5px', flex: 1, marginBottom: '5px'}} key={props.key} className="ride-card">  
+      <Card style={{margin: '0px 5px', flex: 1, marginBottom: '5px'}} key={props.id} className="ride-card">  
          <CardHeader
             style={{paddingBottom: '0px'}}
             avatar={
