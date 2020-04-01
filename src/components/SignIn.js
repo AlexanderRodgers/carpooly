@@ -75,10 +75,13 @@ const SignIn = () => {
       persistance = firebase.auth.Auth.Persistence.LOCAL;
     }
     auth.setPersistence(persistance).then(() => {
-      //TODO: Inform the user if there was an error.
       return auth.signInWithEmailAndPassword(email, pass)
-        .then(() => {
-          history.push('/map');
+        .then((res) => {
+          // Bandage, fixes race condition with user updating from app.js
+          const delay = (ms) => {
+            return new Promise(resolve => setTimeout(resolve, ms));
+          }
+          delay(1000).then(() => history.push('/map'));
         })
         .catch(e => {
           let errorCode = e.code;
