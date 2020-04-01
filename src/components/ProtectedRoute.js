@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { auth } from '../firebase';
 export const ProtectedRoute = ({ component: Component , authed, loading, ...rest }) => {
+
 
    if (loading) {
       return (<div>Loading...</div>);
    }
+
 
    const getCookie = (cname) => {
       var name = cname + "=";
@@ -33,7 +36,6 @@ export const ProtectedRoute = ({ component: Component , authed, loading, ...rest
    return (
       <Route {...rest} render={
          (props) => {
-            console.log(authed);
             if (isAuthed()) {
                return <Component {...props}/>
             } else {

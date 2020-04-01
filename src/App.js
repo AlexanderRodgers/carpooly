@@ -34,7 +34,6 @@ const App = () => {
   });
 
   useEffect(() => {
-    console.log('user', user);
     if (auth.currentUser) {
       addCookie();
       setUser(auth.currentUser);

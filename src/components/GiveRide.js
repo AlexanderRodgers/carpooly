@@ -140,9 +140,7 @@ const GiveRide = (props) => {
       //    document.getElementById('loc-grid').
       // }
       const height = document.getElementById('loc-grid').clientHeight;
-      console.log('objheight', height);
       const windowHeight = window.innerHeight;
-      console.log('win-height', windowHeight);
       document.getElementById('scroll-cards').style.height = `${windowHeight - height}px`
    }, []);
 
@@ -152,7 +150,6 @@ const GiveRide = (props) => {
       let cards = [];
       let i = 0;
       rides.forEach(doc => {
-         console.log(props);
          cards.push(
             <RideCard 
                data={doc.data()}
