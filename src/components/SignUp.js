@@ -74,7 +74,11 @@ const SignUp = () => {
       user.updateProfile({
         displayName: `${first} ${last}`
       });
-      history.push('/map');
+      // Bandage, fixes race condition with user updating from app.js
+      const delay = (ms) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      delay(1000).then(() => history.push('/map'));
     }).catch(e => {
       const errorCode = e.code;
       const message =  e.message;
