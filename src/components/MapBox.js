@@ -20,43 +20,60 @@ const styles = {
    
    const mapContainer = useRef(null);
 
+   const placeMarker = (locMarker, color = null) => {
+      if (!color) {
+         color = '#3FB1CE';
+      }
+      map.flyTo({ center: locMarker.geometry.coordinates });
+      let marker = new mapboxgl.Marker({color: color})
+         .setLngLat(locMarker.geometry.coordinates)
+         .addTo(map);
+      return marker;
+   }
+
+   const updateRoute = async (start, end) => {
+      let res = await route([start, end]);
+      map.flyTo({center: end});
+      if (isRoute) {
+         map.removeLayer('route');
+         map.removeSource('route');
+         setIsRoute(false);
+      }
+      map.addSource('route', {
+         type: 'geojson',
+         data: {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+               type: 'LineString',
+               coordinates: res.routes[0].geometry.coordinates
+            }
+         }
+      });
+      map.addLayer({
+         id: 'route',
+         type: 'line',
+         source: 'route',
+         layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+         },
+         paint: {
+            'line-color': '#888',
+            'line-width': 7
+         }
+      });
+   }
+
+   // getRoute passed by rideCard
+   // TODO: Refactor
    useEffect(() => {
       (async() => {
          if (props.selected.length !== 0) {
-            console.log(props.selected);
+            window.scrollTo(0,0);
             const startGeo = props.selected[0].geometry.coordinates;
             const destGeo = props.selected[1].geometry.coordinates;
-            let res = await route([startGeo, destGeo]);
-            map.flyTo({center: destGeo});
-            if (isRoute) {
-               map.removeLayer('route');
-               map.removeSource('route');
-               setIsRoute(false);
-            }
-            map.addSource('route', {
-               type: 'geojson',
-               data: {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                     type: 'LineString',
-                     coordinates: res.routes[0].geometry.coordinates
-                  }
-               }
-            });
-            map.addLayer({
-               id: 'route',
-               type: 'line',
-               source: 'route',
-               layout: {
-                  'line-join': 'round',
-                  'line-cap': 'round'
-               },
-               paint: {
-                  'line-color': '#888',
-                  'line-width': 7
-               }
-            });
+            await updateRoute(startGeo, destGeo);
             setIsRoute(true);
          }
       })();
@@ -81,7 +98,6 @@ const styles = {
                .then((snapshots) => {
                   props.getRides(snapshots);
                   snapshots.forEach((doc) => {
-                     console.log()
                      new mapboxgl.Marker()
                         .setLngLat(doc.data().start.geometry.coordinates)
                         .addTo(map);
@@ -102,10 +118,7 @@ const styles = {
       if (Object.keys(startMarker).length !== 0) {
          startMarker.remove();
       }
-      map.flyTo({center: props.start.geometry.coordinates});
-      let marker = new mapboxgl.Marker()
-         .setLngLat(props.start.geometry.coordinates)
-         .addTo(map);
+      let marker = placeMarker(props.start);
       setStartMarker(marker);
       setStart(props.start);
    }, [props.start]);
@@ -115,10 +128,7 @@ const styles = {
       if (Object.keys(destMarker).length !== 0) {
          destMarker.remove();
       }
-      map.flyTo({center: props.dest.geometry.coordinates});
-      let marker = new mapboxgl.Marker({ color: '#B22222' })
-         .setLngLat(props.dest.geometry.coordinates)
-         .addTo(map);
+      let marker = placeMarker(props.dest, '#B22222');
       setDestMarker(marker);
       setDest(props.dest);
    }, [props.dest]);
@@ -128,36 +138,7 @@ const styles = {
          if (Object.keys(start).length !== 0 && Object.keys(dest).length !== 0) {
             const startGeo = start.geometry.coordinates;
             const destGeo = dest.geometry.coordinates;
-            let res = await route([startGeo, destGeo]);
-            if (isRoute) {
-               map.removeLayer('route');
-               map.removeSource('route');
-               setIsRoute(false);
-            }
-            map.addSource('route', {
-               type: 'geojson',
-               data: {
-                  type: 'Feature',
-                  properties: {},
-                  geometry: {
-                     type: 'LineString',
-                     coordinates: res.routes[0].geometry.coordinates
-                  }
-               }
-            });
-            map.addLayer({
-               id: 'route',
-               type: 'line',
-               source: 'route',
-               layout: {
-                  'line-join': 'round',
-                  'line-cap': 'round'
-               },
-               paint: {
-                  'line-color': '#888',
-                  'line-width': 7
-               }
-            });
+            await updateRoute(startGeo, destGeo);
             setIsRoute(true);
          }
       })();

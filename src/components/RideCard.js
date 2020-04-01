@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import clsx from 'clsx';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
@@ -56,7 +57,6 @@ const RideCard = (props) => {
          style={{margin: '0px 5px', flex: 1, marginBottom: '5px'}}
          key={props.id}
          className="ride-card"
-         onClick={() => getRoute()}
       >  
          <CardHeader
             style={{paddingBottom: '0px'}}
@@ -67,6 +67,11 @@ const RideCard = (props) => {
             }
             title={props.data.name}
             subheader={`${getArea()} ${getDate(props.data.date)} ${getTime(props.data.time)}`}
+            action={
+               <IconButton onClick={() => getRoute()}>
+                  <ArrowUpwardIcon/>
+               </IconButton>
+            }
          />
          <CardActions>
             Details
