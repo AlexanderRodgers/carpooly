@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import { useHistory } from 'react-router-dom';
+
 //firebase
 import { auth } from '../firebase';
 
@@ -58,6 +60,8 @@ const SignUp = () => {
    const [disabled, setDisabled] = useState(false);
   const classes = useStyles();
 
+  const history = useHistory();
+
   const submit = () => {
     if (!email.includes('@calpoly.edu')) {
       setEmailError(true);
@@ -70,6 +74,7 @@ const SignUp = () => {
       user.updateProfile({
         displayName: `${first} ${last}`
       });
+      history.push('/map');
     }).catch(e => {
       const errorCode = e.code;
       const message =  e.message;
