@@ -15,31 +15,14 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const addCookie = () => {
-    let d = new Date();
-    d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
-    let expires = `expires=${d.toUTCString()}`
-    document.cookie = `user=${auth.currentUser.uid};${expires};path="/"`
-  }
-
   useEffect(() => {
     auth.onAuthStateChanged(authUser => {
       if (authUser) {
-        addCookie();
         setUser(authUser);
         setLoading(false);
       }
-    });
-    setLoading(false);
-  });
-
-  useEffect(() => {
-    if (auth.currentUser) {
-      addCookie();
-      setUser(auth.currentUser);
       setLoading(false);
-    }
-    setLoading(false);
+    });
   }, [user]);
   
   return (
