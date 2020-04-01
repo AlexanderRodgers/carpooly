@@ -53,15 +53,23 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = () => {
   const [disabled, setDisabled] = useState(false);
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
   const [pass, setPass] = useState('');
   const [check, setCheck] = useState(false);
+  const [pHelperText, setPHelperText] = useState('');
+  const [pError, setPError] = useState(false);
+
   const classes = useStyles();
 
   const history = useHistory();
 
   const submit = () => {
+    if (!email.includes('@calpoly.edu')) {
+      setEmailError(true);
+      return;
+    }
     let persistance;
-    if (!check) {
+     if (!check) {
       persistance = firebase.auth.Auth.Persistence.NONE;
     } else {
       persistance = firebase.auth.Auth.Persistence.LOCAL;
@@ -69,10 +77,26 @@ const SignIn = () => {
     auth.setPersistence(persistance).then(() => {
       //TODO: Inform the user if there was an error.
       return auth.signInWithEmailAndPassword(email, pass)
-        .then(res => {
+        .then(() => {
           history.push('/map');
         })
-        .catch(e => console.log(e));
+        .catch(e => {
+          let errorCode = e.code;
+          let errorMessage = e.message;
+          switch (errorCode) {
+            case 'auth/wrong-password':
+              setPHelperText('Username or password is incorrect.');
+              setPError(true);
+              break;
+            case 'auth/user-not-found':
+              setPHelperText('That email does not exist.');
+              setPError(true);
+              break;
+            default:
+              setPHelperText(errorMessage);
+              break;
+          }
+        });
     })
   }
 
@@ -98,6 +122,8 @@ const SignIn = () => {
           <TextField
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={emailError}
+            helperText="You must use your @calpoly.edu email address."
             variant="outlined"
             margin="normal"
             required
@@ -111,6 +137,10 @@ const SignIn = () => {
           <TextField
             value={pass}
             onChange={(e) => setPass(e.target.value)}
+            onClick={() => {
+              setPHelperText('')
+              setPError(false)
+            }}
             variant="outlined"
             margin="normal"
             required
@@ -119,6 +149,8 @@ const SignIn = () => {
             label="Password"
             type="password"
             id="password"
+            helperText={pHelperText}
+            error={pError}
             autoComplete="current-password"
           />
           <FormControlLabel
@@ -143,7 +175,7 @@ const SignIn = () => {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/sign-up" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
