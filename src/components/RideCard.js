@@ -51,7 +51,7 @@ const RideCard = (props) => {
             .delete()
             .then(res => {
                console.log(res);
-               // TODO: Update give ride function.
+               // TODO: Update give ride component so card is removed.
             })
             .catch(res => {
                alert('unable to delete ride at this time.');
