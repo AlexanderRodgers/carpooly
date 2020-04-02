@@ -135,13 +135,14 @@ const GiveRide = (props) => {
    }
 
    useEffect(() => {
+      //TODO: Change height of scroll cards if being used on a mobile device.
       const width = window.innerWidth;
       // if (width < 960) {
       //    document.getElementById('loc-grid').
       // }
       const height = document.getElementById('loc-grid').clientHeight;
       const windowHeight = window.innerHeight;
-      document.getElementById('scroll-cards').style.height = `${windowHeight - height}px`
+      document.getElementById('scroll-cards').style.height = `${windowHeight - height - 5}px`
    }, []);
 
    useEffect(() => {

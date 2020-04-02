@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useContext, Fragment } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,15 +8,19 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import clsx from 'clsx';
 import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
+
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import moment from 'moment';
+import { db, auth } from '../firebase';
 
 const useStyles = makeStyles(theme => ({
    expand: {
      transform: 'rotate(0deg)',
-     marginLeft: 'auto',
      transition: theme.transitions.create('transform', {
        duration: theme.transitions.duration.shortest,
      }),
@@ -29,6 +33,31 @@ const useStyles = makeStyles(theme => ({
 const RideCard = (props) => {
 
    const [expanded, setExpanded] = useState(false);
+   const [select, setSelect] = useState(false);
+   const [option, setOption] = useState('');
+
+   let same = false;
+   let id = props.id.split('-')[1];
+
+   if (auth.currentUser.uid === props.data.userId) {
+      same = true;
+   }
+
+   const handleOption = event => {
+      console.log(event.target.value);
+      let option = event.target.value
+      if (option === 'delete') {
+         db.collection('rides').doc(id)
+            .delete()
+            .then(res => {
+               console.log(res);
+               // TODO: Update give ride function.
+            })
+            .catch(res => {
+               alert('unable to delete ride at this time.');
+            });
+      }
+   }
 
    const getArea = () => {
       let areaString = '';
@@ -73,8 +102,8 @@ const RideCard = (props) => {
                </IconButton>
             }
          />
-         <CardActions>
-            Details
+         <CardActions disableSpacing>
+            <span style={{paddingLeft: '8px'}}>Details</span>
             <IconButton
                className={clsx(classes.expand, {
                   [classes.expandOpen]: expanded,
@@ -83,6 +112,27 @@ const RideCard = (props) => {
             >
                <ExpandMoreIcon/>
             </IconButton>
+            <div style={{flexGrow: '1'}}></div>
+            { same ?
+               <Fragment>
+                  <Select
+                     style={{visibility: 'hidden'}}
+                     value={option}
+                     open={select}
+                     onClose={() => setSelect(false)}
+                     onOpen={() => setSelect(true)}
+                     onChange={(event) => handleOption(event)}
+                  >
+                     <MenuItem value={'edit'}>Edit</MenuItem>
+                     <MenuItem value={'delete'}>Delete</MenuItem>
+                  </Select>
+                  <IconButton aria-label="settings" onClick={() => setSelect(true)}>
+                     <MoreVertIcon />
+                  </IconButton>
+               </Fragment>
+            :
+               ''
+            }
          </CardActions>
          <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>

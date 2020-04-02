@@ -6,6 +6,10 @@
    margin: 5px;
 }
 
+.scroll-cards {
+   overflow-y: auto;
+}
+
 .searchbar {
    margin-bottom: 5px;
 }

@@ -17,9 +17,7 @@ const App = () => {
 
   useEffect(() => {
     setLoading(true);
-    console.log('running affect');
     auth.onAuthStateChanged(authUser => {
-      console.log('auth user', authUser);
       if (authUser) {
         setUser(authUser);
         setLoading(false);
