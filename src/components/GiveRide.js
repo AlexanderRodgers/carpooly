@@ -1,27 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Select from '@material-ui/core/Select';
-import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
 import SearchBar from './SearchBar';
-import DateFnsUtils from '@date-io/date-fns';
+import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { UserContext } from './UserContext';
 import MaskedInput from 'react-text-mask';
 import PropTypes from 'prop-types';
 import { db } from '../firebase';
-import {
-   MuiPickersUtilsProvider,
-   KeyboardTimePicker,
-   KeyboardDatePicker,
- } from '@material-ui/pickers';
 import './GiveRide.css';
 import RideCard from './RideCard';
+import RideForm from './RideForm';
 const NumberTextMask = (props) => {
    const { inputRef, ...other } = props;
  
@@ -168,14 +156,21 @@ const GiveRide = (props) => {
    return (
       <div>
          <Grid className="ride-form" id="ride-form" md={3} xs={12} item style={{backgroundColor:"white"}}>
-            <div id="loc-grid">
-               <Grid item xs={12} className="searchbar" style={{marginBottom:'5px'}}>
+             <div id="loc-grid">
+                <Grid item xs={12} className="searchbar" style={{marginBottom:'5px'}}>
                   <SearchBar label="Choose a start location" getOption={handleStart}></SearchBar>
                </Grid>
                <Grid item xs={12} className="searchbar">
                   <SearchBar label="Choose a destination" getOption={handleDest}></SearchBar>
                </Grid>
-               <div className="option-pickers">
+               <RideForm/>
+               <StyledButton 
+                  background="#1089d4"
+                  style={{ width:"100%" }}
+                  onClick={() => submit()}
+                  ><b>{checked ? 'Request Ride' : 'Add Ride'}</b>
+               </StyledButton>
+               {/*<div className="option-pickers">
                   <FormControlLabel
                      style={{verticalAlign: "top", display: "inline", alignItems: "inherit"}} 
                      control={<Switch checked={checked} onChange={() => setChecked(!checked)}/>}
@@ -238,8 +233,9 @@ const GiveRide = (props) => {
                      style={{width:"95%", margin:"auto"}}
                      onClick={() => submit()}
                      ><b>{checked ? 'Request Ride' : 'Add Ride'}</b></StyledButton>
-               </div>
+               </div> */}
             </div>
+
             <div className="scroll-cards" id="scroll-cards">
                {cards.length === 0 ? '' : cards}
             </div>

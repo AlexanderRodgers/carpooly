@@ -1,0 +1,19 @@
+.button-container {
+   display: flex;
+   justify-content: center;
+}
+
+.phone-number {
+   padding: 5px;
+   width: 45%;
+}
+
+@media (min-width: 200px) {
+   .date-picker {
+      width: 45%;
+   }
+
+   .time-picker {
+      width: 45%;
+   }
+}
