@@ -1,3 +1,13 @@
+## About this Repo
+This is basically just a little website I wrote over spring break. The site is live at https://loving-joliot-46dcde.netlify.com. You must have a @calpoly.edu email address to create an account on this site. Although the site works well enough, after creating this I realized that a much better and effecient service would involve notifying users (via email, sms, etc.) when a post on the ridesharing facebook group matches a location that a user wants to go to. If anyone is interested in collaborating on this project send me an email: aerodger@calpoly.edu
+
+I may or may not continue this project when I have more free time. Currently, with the entire campus having virtual classes until Fall 2020, I'm putting it on the backburner.
+
+### (Possible) Future updates
+* Update the map view when a user makes an edit or a deletion
+* Add a dedicated search page
+* Make marker's clickable
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
