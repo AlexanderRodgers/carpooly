@@ -80,7 +80,7 @@ const styles = {
    }, [props.selected]);
 
    useEffect(() => {
-      mapboxgl.accessToken = 'pk.eyJ1IjoiYWxleHJvZGdlcnMiLCJhIjoiY2s4MjlxMWZzMDh0dzNlbnpxaXd4M3k5diJ9.1VPthZmgxhtKulM9ifl16g';
+      mapboxgl.accessToken = process.env.REACT_APP_API_KEY;
 
       const initializeMap = ({ setMap, mapContainer }) => {
          const map = new mapboxgl.Map({

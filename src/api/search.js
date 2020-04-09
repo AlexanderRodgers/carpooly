@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const TOKEN = 'pk.eyJ1IjoiYWxleHJvZGdlcnMiLCJhIjoiY2s4MjlxMWZzMDh0dzNlbnpxaXd4M3k5diJ9.1VPthZmgxhtKulM9ifl16g';
+const TOKEN = process.env.REACT_APP_API_KEY;
 
 const locUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/';
 
